@@ -23,7 +23,7 @@
           v-model="passwordField"
         />
         <input
-          @click="clickedLink"
+          @click="clickedLink()"
           type="submit"
           id="login-form-submit"
         />
@@ -33,7 +33,14 @@
 </template>
 
 <script>
+// import { ref } from "vue";
 export default {
+  data() {
+    return {
+      userName: ''
+    }
+  },
+  emits: ["loggedIn"],
   methods: {
     clickedLink() {
       const userData = {
@@ -41,20 +48,32 @@ export default {
         passwordField: this.passwordField,
       };
       const hideShowNewPost = document.getElementById("newPostAfterLogin");
+      const hideShowNewPostSide = document.getElementById("newPostAfterLoginSide");
       const hideShowLogout = document.getElementById("logOutAfterLogin");
+      const hideShowLogoutSide = document.getElementById("logOutAfterLoginSide");
       const hideShowLogin = document.getElementById("logInAfterLogin");
+      const hideShowLoginSide = document.getElementById("logInAfterLoginSide");
+     
       if (
-        userData.usernameField === "guest" &&
-        userData.passwordField === "guest"
+        userData.usernameField === "admin" &&
+        userData.passwordField === "admin"
       ) {
-        alert("You have successfully logged in.");
+        this.userName = this.usernameField;
+        console.log(this.userName);
+        alert(`Welcome ${this.userName}!`);
+        this.$emit("loggedIn");
+        
+        hideShowNewPost.style.display = "inline";
+        hideShowNewPostSide.style.display = "inline";
+        hideShowLogout.style.display = "inline";
+        hideShowLogoutSide.style.display = "inline";
+        hideShowLogin.style.display = "none";
+        hideShowLoginSide.style.display = "none";
+
         this.$router.push({ path: "/" });
 
-        hideShowNewPost.style.display = "inline";
-        hideShowLogout.style.display = "inline";
-        hideShowLogin.style.display = "none";
       } else {
-        alert("Invalid Username and/or password. Try 'guest' / 'guest'");
+        alert("Invalid Username and/or password. try Username 'admin' and password 'admin'");
         location.reload();
       }
     },

@@ -22,7 +22,7 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LogInView.vue')
+      component: () => import('../views/LoginView.vue')
     },
     {
       path: "/logout",
@@ -33,6 +33,11 @@ const router = createRouter({
       path: '/posts/:id',
       name: 'posts',
       component: () => import('../views/PostDetailView.vue')
+    },
+    {
+      path: '/edit/:id',
+      name: 'edit',
+      component: () => import('../views/EditPostView.vue')
     },
   ]
 })

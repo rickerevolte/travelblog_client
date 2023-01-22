@@ -1,6 +1,8 @@
 <template>
-    <div id="infowindow">
-            <a :href="url"><h3>{{headLine}}</h3></a>
+    <div id="infowindow" @click="openPost(id)">
+            <!-- <a :href="url"> -->
+                <h3>{{headLine}}</h3>
+            <!-- </a> -->
             <h2>{{city}}</h2>
             <p>{{from}} - {{to}}</p>
         <div class="infoAuth">
@@ -13,13 +15,25 @@
 <script>
     export default {
         props: ["url", "id", "headLine", "city", "from", "to", "auth_pic", "author" ],
+        methods: {
+            openPost(id) {
+                console.log(`id of post is: ${id}`);
+                this.$router.push({
+                path: "/posts/" + id
+            });
+            }
+        }
     }
 </script>
 
 <style scoped>
+#infowindow {
+    cursor: pointer;
+}
 #infowindow > a {
     color: black;
     text-decoration: underline;
+    
 }
 .infoAuth {
     position: relative;

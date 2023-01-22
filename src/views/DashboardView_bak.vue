@@ -2,11 +2,10 @@
     <div class="wrapper">
         <div id="BlogPostwrapper">
             <BlogPostPreview v-for="(location, index) in this.locations" :key="index" 
-                            @fotoClicked="reloadSelectedFotoMap(location, id)"
+                            @fotoClicked="reloadSelectedFotoMap(location)"
                             @readBlogPostClicked="loadPostDetailView(location.id)"
                             @deletePostClicked="deleteThisPost(location.id)"
                             @editPostClicked="editThisPost(location.id)"
-                            :userIsLoggedIn ="checkUserLogIn"
                             :image ="location.image"
                             :city="location.city" 
                             :country="location.country"
@@ -57,17 +56,18 @@ import BlogPostPreview from "../components/BlogPostPreview.vue";
 import InfoWindow from "../components/InfoWindow.vue";
 
 export default {
-    props: ["checkUserLogIn"],
-    data() {
-        return {
-            locations: [],
-            fotoClickedLocation: {},
-            center: {lat: 53.558, lng: 9.944},
-            markers: [],
-            zoom: 2,
-            openedMarkerId: null,
-        }
-    },
+    name: 'App',
+        data() {
+            return {
+                locations: [],
+                fotoClickedLocation: {},
+                center: {lat: 53.558, lng: 9.944},
+                markers: [],
+                zoom: 2,
+                openedMarkerId: null,
+            }
+        },
+    emits: ["locationsSorted"],
     components: {
         InfoWindow,
         BlogPostPreview
@@ -91,12 +91,9 @@ export default {
                 to: this.locations[i].to,
                 headLine: this.locations[i].headLine,
                 auth_pic: this.locations[i].auth_pic,
-                position: {lat: this.locations[i].lat, 
-                    lng: this.locations[i].lng},
-                author: this.locations[i].author}
+                position: {lat: this.locations[i].lat, lng: this.locations[i].lng}, author: this.locations[i].author}
                 this.markers.push(markerPosition);
-        };
-        console.log(this.markers);
+        }
     },
     methods: {
         reloadSelectedFotoMap(location) {
@@ -118,20 +115,21 @@ export default {
             });
         },
         async deleteThisPost(id) {
-            // alert("sorry, permission denied");
+            alert("sorry, function delete is not available");
             alert(`are you sure to delete post no: ${id}?`)
             const result = await locationsApi.deleteLocation(id);
             // console.log(result);
-            console.log(`deleted post ${id}`);
-            // alert(`click on read post and then go back to see effect delete id: ${id} really happened ;)`);
+            alert(result);
+            console.log("na ja...");
             location.reload();     
         },
         async editThisPost(id) {
             let Id = String(id);
-            console.log(`editThisPost: ${Id} clicked`)
-            this.$router.push({
-                path: "/edit/" + Id
-            });
+            // console.log(`editThisPost: ${Id} clicked`)
+            alert("sorry, function edit is not available")
+            // this.$router.push({
+            //     path: "/edit/" + Id
+            // });
         }
     },   
 }

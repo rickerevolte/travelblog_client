@@ -14,13 +14,14 @@
                 <li id="newPostAfterLogin"
                 ><RouterLink to="/newpost"
                 i class="fa-solid fa-marker fa-1x"
-                ><span class="li"> Edit/Add Post</span></RouterLink></li>
-                <li id="logInAfterLogin"><RouterLink to="/login" 
+                ><span class="li"> New Post</span></RouterLink></li>
+                <li id="logInAfterLogin"
+                ><RouterLink to="/login" 
                 i class="fa-solid fa-arrow-right-to-bracket fa-1x"
-                ><span class="li"> Log In</span></RouterLink></li>
+                ><span class="li" > Log In</span></RouterLink></li>
                 <li id="logOutAfterLogin"><RouterLink to="/logout"
                 i class="fa-solid fa-door-open fa-1x"
-                ><span class="li"> Log Out</span></RouterLink></li>
+                ><span class="li"> Log Out</span></RouterLink></li>        
               </ul>
             </nav>
           <a href="#" id="burgerButton">=</a>
@@ -29,28 +30,54 @@
           <ul>
             <li><RouterLink to="/"
             i class="fa-solid fa-house fa-1x"
-            ></RouterLink>h</li>
+            ></RouterLink>home</li>
             <li><RouterLink to="/contact"
             i class="fa-solid fa-address-card fa-1x"
-            ></RouterLink>c</li>
-            <li id="newPostAfterLogin"
+            ></RouterLink>Imprint</li>
+            <li id="newPostAfterLoginSide"
             ><RouterLink to="/newpost"
             i class="fa-solid fa-marker fa-1x"
-            ></RouterLink></li>
-            <li id="logInAfterLogin"><RouterLink to="/login" 
+            ></RouterLink>New post</li>
+            <li id="logInAfterLoginSide"><RouterLink to="/login" 
             i class="fa-solid fa-arrow-right-to-bracket fa-1x"
-            ></RouterLink>l</li>
-            <li id="logOutAfterLogin"><RouterLink to="/logout"
+            ></RouterLink>Log in</li>
+            <li id="logOutAfterLoginSide"><RouterLink to="/logout"
             i class="fa-solid fa-door-open fa-1x"
-            ></RouterLink></li>
+            ></RouterLink>Log Out</li>
           </ul>
         </div>
   </div>
 </template>
 
+<script>
+
+export default {
+  data() {
+    return {
+      isLoggedIn: false,
+    }
+
+  },
+  components: {
+
+  },
+  created() {
+
+},
+methods: {
+  isUserLoggedIn(userName) {
+    this.isLoggedIn = true;
+    console.log(`${userName} is logged in`)
+  }
+}
+}
+
+</script>
+
 <style scoped>
+
 header {
-    border-bottom:  black solid 1px;
+    border-bottom: black solid 1px;
     height: 60px;
     line-height: 60px;
     position: relative;
@@ -69,8 +96,9 @@ a {
     color: blue;
     text-decoration: none;
 }
-#newPostAfterLogin,
-#logOutAfterLogin {
+#newPostAfterLogin, #newPostAfterLoginSide,
+#logOutAfterLogin, #logOutAfterLoginSide
+{
   display: none;
 }
 
@@ -98,10 +126,10 @@ header > a {
 }
 #sideMenu {
   top: 80px;
-  right: -50px;
+  right: -120px;
   position: fixed;
   z-index: 1000;
-  width: 50px;
+  width: 120px;
   height: calc(100vh - 80px);
   background-color: lightblue;
   transition: 400ms;

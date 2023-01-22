@@ -66,7 +66,7 @@ export default {
         async addPost() {
             const OPENWEATHER_KEY = import.meta.env.VITE_OPENWEATHER_KEY;
             // console.log("addPost clicked")
-            let url = `http://api.openweathermap.org/data/2.5/weather?q=${this.userCity}&appid=${OPENWEATHER_KEY}`;
+            let url = `https://api.openweathermap.org/data/2.5/weather?q=${this.userCity}&appid=${OPENWEATHER_KEY}`;
             const response = await fetch(url);
             const geoData = await response.json();
             //check for highest id in array in localStorage
@@ -98,7 +98,7 @@ export default {
             };
             console.log(newLocation);
             const result = await locationsApi.addLocation(newLocation);
-            alert(result);
+            // alert(result);
             this.$router.push({
                 path: "/"
             });

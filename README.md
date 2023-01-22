@@ -1,18 +1,49 @@
-# travelblog_client
+# netlify_travelblog
 
-graduation project full-stack web development course at hamburg coding school 2021/22
-using vue3 multipage, fetch API, node.js express server
+This is the code for my finishing project at Hamburg Coding School in March 2022
+Visit the deployed app at: https://chipper-kleicha-79cfb3.netlify.app/
 
-start server-app:
-- cd travelblog_server 
-- install required node modules
-- run server at localhost:8080 with command: 'npm run dev'
+## Recommended IDE Setup
 
-start client-app:
-- cd travelblog_client
-- install required node modules
-- Needed API-Keys: 
-- googlemaps API-key: https://mapsplatform.google.com/
-- openweathermap API-key: https://home.openweathermap.org/
-- Paste API-keys in .env.example and rename it to .env
-- run application at localhost:3000 with command: 'npm run dev'
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.vscode-typescript-vue-plugin).
+
+## Customize configuration
+
+See [Vite Configuration Reference](https://vitejs.dev/config/).
+
+## Project Setup
+
+```sh
+npm install
+```
+
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
+```
+
+### Compile and Minify for Production
+
+```sh
+npm run build
+```
+
+### Run Unit Tests with [Vitest](https://vitest.dev/)
+
+```sh
+npm run test:unit
+```
+
+### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+
+```sh
+npm run build
+npm run test:e2e # or `npm run test:e2e:ci` for headless testing
+```
+
+### Lint with [ESLint](https://eslint.org/)
+
+```sh
+npm run lint
+```

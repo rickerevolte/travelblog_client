@@ -3,7 +3,8 @@ import App from './App.vue'
 import router from './router'
 import VueGoogleMaps from '@fawmi/vue-google-maps'
 
-const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+const OPENWEATHER_KEY = import.meta.env.VITE_OPENWEATHER_KEY;
 const app = createApp(App)
 
 app.use(router)

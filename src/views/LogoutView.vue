@@ -5,6 +5,10 @@
   </div>
 </template>
 
+<script>
+
+</script>
+
 <style scoped>
 .logOut {
   position: relative;
