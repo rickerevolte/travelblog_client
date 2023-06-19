@@ -1,54 +1,59 @@
 <template>
-    <div class="wrapper">
-        <div id="BlogPostwrapper">
-            <BlogPostPreview v-for="(location, index) in this.locations" :key="index" 
-                            @fotoClicked="reloadSelectedFotoMap(location, id)"
-                            @readBlogPostClicked="loadPostDetailView(location.id)"
-                            @deletePostClicked="deleteThisPost(location.id)"
-                            @editPostClicked="editThisPost(location.id)"
-                            :userIsLoggedIn ="checkUserLogIn"
-                            :image ="location.image"
-                            :city="location.city" 
-                            :country="location.country"
-                            :from="location.from" 
-                            :to="location.to"
-                            :headline="location.headLine" 
-                            :author="location.author"
-                            :auth_pic="location.auth_pic"
-                            :id="location.id"
-                            ></BlogPostPreview>
-        </div>
-        <div>
-            <GMapMap
-                :center="center"
-                :zoom="zoom"
-                map-type-id="terrain"
-                style="width: 500px; height: 300px">
-                    <GMapMarker
-                        :key="index"
-                        v-for="(m, index) in markers"
-                        :position="m.position"
-                        :clickable="true"
-                        :draggable="true"
-                        @click="openMarker(m.id)">
-                        <GMapInfoWindow
-                            :closeclick="true"
-                            @closeclick="openMarker(null)"
-                            :opened="openedMarkerId === m.id">
-                                <InfoWindow
-                                :id="m.id"
-                                :city="m.city"
-                                :url="m.url"
-                                :from="m.from"
-                                :to="m.to"
-                                :auth_pic="m.auth_pic"
-                                :headLine="m.headLine"
-                                :author="m.author"/>
-                        </GMapInfoWindow>
-                </GMapMarker>
-            </GMapMap>
-        </div>
+  <div class="wrapper">
+    <div id="BlogPostwrapper">
+      <BlogPostPreview
+        v-for="(location, index) in this.locations"
+        :key="index"
+        @fotoClicked="reloadSelectedFotoMap(location, id)"
+        @readBlogPostClicked="loadPostDetailView(location.id)"
+        @editPostClicked="editThisPost(location.id)"
+        :userIsLoggedIn="checkUserLogIn"
+        :image="location.image"
+        :city="location.city"
+        :country="location.country"
+        :from="location.from"
+        :to="location.to"
+        :headline="location.headLine"
+        :author="location.author"
+        :auth_pic="location.auth_pic"
+        :id="location.id"
+      ></BlogPostPreview>
     </div>
+    <div id="GMapDiv">
+      <GMapMap
+        :center="center"
+        :zoom="zoom"
+        map-type-id="roadmap"
+        style="width: 100% !important"
+      >
+        <GMapMarker
+          :key="index"
+          v-for="(m, index) in markers"
+          :position="m.position"
+          :clickable="true"
+          :draggable="true"
+          @click="openMarker(m.id)"
+        >
+          <GMapInfoWindow
+            :closeclick="true"
+            @closeclick="openMarker(null)"
+            :opened="openedMarkerId === m.id"
+          >
+            <InfoWindow
+              :id="m.id"
+              :city="m.city"
+              :url="m.url"
+              :from="m.from"
+              :to="m.to"
+              :auth_pic="m.auth_pic"
+              :headLine="m.headLine"
+              :author="m.author"
+            />
+          </GMapInfoWindow>
+        </GMapMarker>
+      </GMapMap>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -57,118 +62,108 @@ import BlogPostPreview from "../components/BlogPostPreview.vue";
 import InfoWindow from "../components/InfoWindow.vue";
 
 export default {
-    props: ["checkUserLogIn"],
-    data() {
-        return {
-            locations: [],
-            fotoClickedLocation: {},
-            center: {lat: 53.558, lng: 9.944},
-            markers: [],
-            zoom: 2,
-            openedMarkerId: null,
-        }
-    },
-    components: {
-        InfoWindow,
-        BlogPostPreview
-    },
+  props: ["checkUserLogIn"],
+  data() {
+    return {
+      locations: [],
+      fotoClickedLocation: {},
+      center: { lat: 53.558, lng: 9.944 },
+      markers: [],
+      zoom: 2,
+      openedMarkerId: null,
+    };
+  },
+  components: {
+    InfoWindow,
+    BlogPostPreview,
+  },
 
-    created: async function() {
+  created: async function () {
+    this.locations = await locationsApi.getAllLocations();
+    this.locations.sort(function (a, b) {
+      return b.from.localeCompare(a.from);
+    });
+    // save this.locations to localStorage for PostDetailView
+    let jsonStringOfSortedLocs = JSON.stringify(this.locations);
+    localStorage.setItem(
+      "myLocalStorageSortedLocations",
+      jsonStringOfSortedLocs
+    );
 
-        this.locations = await locationsApi.getAllLocations();
-        this.locations.sort(function(a, b) {
-            return b.from.localeCompare(a.from);
-        });
-        // save this.locations to localStorage for PostDetailView
-        let jsonStringOfSortedLocs = JSON.stringify(this.locations);
-        localStorage.setItem("myLocalStorageSortedLocations", jsonStringOfSortedLocs);
-
-        for (let i=0; i < this.locations.length; i++) {
-            let markerPosition = {
-                url: `/posts/${String(this.locations[i].id)}`,
-                id: this.locations[i].id,
-                from: this.locations[i].from,
-                to: this.locations[i].to,
-                headLine: this.locations[i].headLine,
-                auth_pic: this.locations[i].auth_pic,
-                position: {lat: this.locations[i].lat, 
-                    lng: this.locations[i].lng},
-                author: this.locations[i].author}
-                this.markers.push(markerPosition);
-        };
-        console.log(this.markers);
+    for (let i = 0; i < this.locations.length; i++) {
+      let markerPosition = {
+        url: `/posts/${String(this.locations[i].id)}`,
+        id: this.locations[i].id,
+        from: this.locations[i].from,
+        to: this.locations[i].to,
+        headLine: this.locations[i].headLine,
+        auth_pic: this.locations[i].auth_pic,
+        position: { lat: this.locations[i].lat, lng: this.locations[i].lng },
+        author: this.locations[i].author,
+      };
+      this.markers.push(markerPosition);
+    }
+  },
+  methods: {
+    reloadSelectedFotoMap(location) {
+      let clickedLocationCoords = { lat: location.lat, lng: location.lng };
+      this.center = clickedLocationCoords;
     },
-    methods: {
-        reloadSelectedFotoMap(location) {
-            // console.log(`clicked city is = ${location.city}`)
-            let clickedLat = location.lat;
-            let clickedLng = location.lng;
-            let clickedLocationCoords = {lat: clickedLat, lng: clickedLng};
-            this.center=clickedLocationCoords;
-            // console.log(location);
-        },
-        openMarker(id) {
-            this.openedMarkerId = id;
-            localStorage.setItem("id", this.openedMarkerId);
-        },
-        loadPostDetailView(id){
-            let Id = String(id);
-            this.$router.push({
-                path: "/posts/" + Id
-            });
-        },
-        async deleteThisPost(id) {
-            // alert("sorry, permission denied");
-            alert(`are you sure to delete post no: ${id}?`)
-            const result = await locationsApi.deleteLocation(id);
-            // console.log(result);
-            console.log(`deleted post ${id}`);
-            // alert(`click on read post and then go back to see effect delete id: ${id} really happened ;)`);
-            location.reload();     
-        },
-        async editThisPost(id) {
-            let Id = String(id);
-            console.log(`editThisPost: ${Id} clicked`)
-            this.$router.push({
-                path: "/edit/" + Id
-            });
-        }
-    },   
-}
+    openMarker(id) {
+      this.openedMarkerId = id;
+      localStorage.setItem("id", this.openedMarkerId);
+    },
+    loadPostDetailView(id) {
+      this.$router.push({
+        path: "/posts/" + String(id),
+      });
+    },
+    async editThisPost(id) {
+      this.$router.push({
+        path: "/edit/" + String(id),
+      });
+    },
+  },
+};
 </script>
-
-<style>
-.vue-map {
-  position: relative;
-  height: 50vh !important;
-  z-index: 10;
-}
-</style>
 
 <style scoped>
 .wrapper {
-    position: relative;
-    top: 90px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: calc(100% - 10px);
-    height: 100%;
-    gap: 10px;
+  position: relative;
+  top: 90px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: calc(100% - 0px);
+  height: 100%;
 }
+
 .wrapper > div {
-    width: calc(50% - 10px)
+  width: calc(50% - 15px);
 }
+
 #BlogPostwrapper {
-    height: calc(100vh - 80px);
-    overflow: scroll;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 15px;
-    padding-left: 10px;
+  height: calc(100vh - 80px);
+  overflow: scroll;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 0 10px 0 10px;
 }
+
+#GMapDiv {
+  border: yellowgreen solid 0px;
+  min-width: 290px;
+}
+
+/* See .assets/css/styles.css for  
+.vue-map-container
+.vue-map
+.vue-map-hidden
+*/
+
 h2 {
-    padding: 10px;
+  padding: 10px;
 }
 </style>

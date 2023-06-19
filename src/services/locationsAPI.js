@@ -17,7 +17,7 @@ async function getAllLocations() {
     return dataArray;
 }
 async function getLocationById(id) {
-    console.log(`getLocationById called ${id}`);
+    // console.log(`getLocationById called ${id}`);
     const url = serverURL + `/${id}`;
     const response = await fetch(url, {
         method: "GET",
@@ -25,7 +25,7 @@ async function getLocationById(id) {
     });
     const result = await response.json();
     const locationArray = result.result;
-    console.log(locationArray);
+    // console.log(locationArray);
     return locationArray;
 }
 async function addLocation(newLocation) {
@@ -38,7 +38,7 @@ async function addLocation(newLocation) {
         body: JSON.stringify(newLocation) // = req.body
     });
     const result = await response.json();
-    return result.result;
+    return result;
 }
 async function editLocation(editedPost) {
     console.log(`locationsAPI editLocation ${editedPost.city} called`);

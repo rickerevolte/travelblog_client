@@ -2,67 +2,82 @@
   <div class="vCard">
     <div class="top">
       <div class="foto">
-        <img :src="image"/>
+        <img :src="image" />
       </div>
     </div>
     <div class="bottom">
       <a href="#" @click="clickedImage(id)">
-      <h2>{{ city }} - {{ country }}</h2>
+        <h2>{{ city }} - {{ country }}</h2>
       </a>
       <h3>{{ headline }}</h3>
       <h5>{{ from }} - {{ to }}</h5>
-        <div class="auth">
-          <img :src="auth_pic" />
-          <h5> by: {{ author }}</h5>
-          <a href="#" @click="clickedBlogPost(id)">read blog post</a>
-          <div v-if="userIsLoggedIn" id="userEdit">
-            <div class="userButtonBox">
-              <button @click="deletePost(id)">delete</button>
-              <button @click="editPost(id)">edit</button>
-            </div>
+      <div class="auth">
+        <img :src="auth_pic" />
+        <h5>by: {{ author }}</h5>
+        <a href="#" @click="clickedBlogPost(id)">read blog post</a>
+        <div v-if="userIsLoggedIn" id="userEdit">
+          <div class="userButtonBox">
+            <button @click="editPost(id)">edit</button>
           </div>
-          <div v-else>
-            <a href="#" @click="goToLogIn()">log in to edit</a></div>
-        </div> 
+        </div>
+        <div v-else>
+          <a href="#" @click="goToLogIn(id)">log in to edit</a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
-  props: ["image", "city", "country", "headline", "from", "to", "author", "auth_pic", "id", "userIsLoggedIn"],
+  props: [
+    "image",
+    "city",
+    "country",
+    "headline",
+    "from",
+    "to",
+    "author",
+    "auth_pic",
+    "id",
+    "userIsLoggedIn",
+  ],
 
-  emits: ["fotoClicked", "readBlogPostClicked", "deletePostClicked", "editPostClicked"],
+  emits: [
+    "fotoClicked",
+    "readBlogPostClicked",
+    "deletePostClicked",
+    "editPostClicked",
+  ],
 
   methods: {
     clickedImage(id) {
       this.$emit("fotoClicked", id);
     },
     clickedBlogPost(id) {
-      this.$emit("readBlogPostClicked", id)
-    },
-    deletePost(id) {
-      this.$emit("deletePostClicked", id);
+      this.$emit("readBlogPostClicked", id);
     },
     editPost(id) {
       this.$emit("editPostClicked", id);
     },
-    goToLogIn() {
+    goToLogIn(id) {
+      console.log(id);
       this.$router.push({
-        path: "/login/"
-        })
-    }
+        path: "/login/",
+      });
+      console.log("pushed");
+    },
   },
   created() {
     // console.log(this.city)
-  }
+  },
 };
 </script>
 
 <style scoped>
 .vCard {
   position: relative;
+  /* width: calc(50% - 30px); */
   width: 300px;
   min-height: 475px;
   background-color: rgb(218, 216, 206);
@@ -74,7 +89,6 @@ export default {
   position: relative;
   width: 300px;
   height: 212px;
-  
 }
 .top {
   position: relative;
@@ -107,8 +121,6 @@ export default {
 #userEdit {
   display: block;
   width: 270px;
-  /* border: dotted black 2px;
-  background-color: aquamarine; */
 }
 .userButtonBox {
   display: flex;
@@ -121,7 +133,6 @@ export default {
 }
 h4,
 p,
-
 h5 {
   font-style: oblique;
   margin-bottom: 5px;
@@ -131,6 +142,5 @@ h4 {
 }
 a {
   color: black;
-  text-decoration: line;
 }
 </style>
