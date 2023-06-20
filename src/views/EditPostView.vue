@@ -107,18 +107,17 @@ export default {
           },
         },
       },
+      userPostToUpdate: {},
     };
   },
-  // created() {
-  //   console.log(`confirmOK: ${this.confirmOK}`);
-  //   console.log(`confirmCancel: ${this.confirmCancel}`);
-  // },
   methods: {
+    // basic methods
     cityCheckedOk() {
       this.cityCountryCheck = true;
       this.showMessageBox = true;
       this.MBoxBGColor = "green";
-      this.MessageToUser = `Found ${this.userInputCity} – Click 'update Post' to Update`;
+      this.MessageToUser = `Found ${this.userInputCity} – Continue editing and click 'Update' to update your post`;
+      this.showBtnBox = false;
     },
     askForCity(whoEver) {
       this.showMessageBox = true;
@@ -132,24 +131,22 @@ export default {
       this.MessageToUser = `${noCity} not found – Please check spelling or try next bigger city`;
       this.showBtnBox = false;
     },
+    // confirm methods for all parents of UserInput
     setOK() {
-      console.log(`confirmOK: ${this.confirmOK}`);
       this.checkAction();
     },
     setCancel() {
-      console.log(`confirmCancel: ${this.confirmCancel}`);
       this.checkAction();
     },
+    // specific methods only for EditPostVue => Delete and Update
     editPostClicked() {
       this.editOK = true;
-      console.log(`editOK: ${this.editOK}`);
-      // extract this to function checkAction
       if (this.cityCountryCheck) {
-        const Id = this.$route.params.id;
         if (this.userPost.auth_pic.length > 255) {
           alert("URL is too long. Max 255 characters is allowed");
           user_auth_pic = prompt(`enter new URL`, this.selectedPost.auth_pic);
         }
+        const Id = this.$route.params.id;
         const postToEdit = {
           id: Id,
           image: this.userPost.image,
@@ -165,46 +162,55 @@ export default {
           author: this.userPost.author,
           auth_pic: this.userPost.auth_pic,
         };
+        this.userPostToUpdate = postToEdit;
         this.cityCountryCheck = false;
         this.showMessageBox = true;
         this.MBoxBGColor = "orange";
-        this.MDelBoxBGColor = "blue";
-        this.MessageToUser = "editing Post...";
-        this.showBtnBox = false;
-        this.editPost(postToEdit);
+        this.MessageToUser = `${this.userPostToUpdate.author}, are you sure to update your Post ${this.userPostToUpdate.city} - "${this.userPostToUpdate.headLine}" ?`;
+        this.showBtnBox = true;
       } else {
-        console.log("city not checked");
+        // city not checked
         this.showMessageBox = true;
         this.MBoxBGColor = "red";
         this.MessageToUser = `Dear ${this.userPost.author} – Please check City first`;
       }
     },
     deleteClicked() {
+      // first level delete, confirmation outstanding
       this.deleteOK = true;
       this.showMessageBox = true;
       this.MBoxBGColor = "red";
       this.MessageToUser = `Dear ${this.userPost.author}, are you sure to delete post no: ${this.userPost.id}?`;
       this.showBtnBox = true;
-      console.log(`deleteOK: ${this.deleteOK}`);
     },
     checkAction() {
-      // I have to now add the editPost choice here
-      if (this.deleteOK == true && this.confirmOK == true) {
-        console.log("deleting");
-        this.deleteThisPost();
-      } else {
-        console.log("something else...");
-        this.cancelDeletePost();
+      // checking confirmation
+      if (this.deleteOK == true) {
+        if (this.deleteOK == true && this.confirmOK == true) {
+          this.deleteThisPost();
+        } else {
+          this.cancelDeletePost();
+        }
+      } else if (this.editOK == true) {
+        if (this.editOK == true && this.confirmOK == true) {
+          this.editPost(this.userPostToUpdate);
+        } else {
+          this.cancelEditPost();
+        }
       }
     },
     async editPost(editedPost) {
       const result = await locationsApi.editLocation(editedPost);
-      console.log(result);
+      this.cityCountryCheck = false;
+      this.showMessageBox = true;
+      this.MBoxBGColor = "green";
+      this.MessageToUser = `updating post ${this.userPostToUpdate.id}...`;
+      this.showBtnBox = false;
       setTimeout(() => {
         this.$router.push({
           path: "/",
         });
-      }, 3000);
+      }, 2000);
     },
     backButton() {
       this.$router.push({
@@ -223,7 +229,7 @@ export default {
         this.$router.push({
           path: "/",
         });
-      }, 3000);
+      }, 2000);
     },
     cancelDeletePost() {
       this.showMessageBox = true;
@@ -234,7 +240,7 @@ export default {
     cancelEditPost() {
       this.showMessageBox = true;
       this.MBoxBGColor = "red";
-      this.MessageToUser = `You cancelled editing Post ${this.userPost.id}`;
+      this.MessageToUser = `You cancelled editing Post ${this.userPost.id}. Continue editing or go back.`;
       this.showBtnBox = false;
     },
   },

@@ -1,6 +1,5 @@
 <template>
   <div id="MessageComponent">
-    POST:
     {{ MessageToUser }}
     <ConfirmButtons
       v-if="showBtnBox"
@@ -35,11 +34,9 @@ export default {
   },
   methods: {
     emitOK() {
-      console.log("received ok from ConfirmButtons");
       this.$emit("ok");
     },
     emitCancel() {
-      console.log("received cancel from ConfirmButtons");
       this.$emit("cancel");
     },
   },
@@ -49,11 +46,9 @@ export default {
 <style>
 #MessageComponent {
   width: 400px;
-  /* height: 200px; */
   display: block;
   width: 61ch;
   padding: 10px, 10px;
-  /* border: black solid 1px; */
   background-color: #ebebeb;
   color: white;
   border-radius: 5px;

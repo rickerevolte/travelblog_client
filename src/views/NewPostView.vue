@@ -93,7 +93,6 @@ export default {
       this.MessageToUser = `Found ${this.userInputCity}. Click 'add Post' to continue.`;
     },
     doAnotherThing(blabla) {
-      console.log(blabla);
       let text = "this will clear all your input. Ok to proceed?";
       if (confirm(text) == true) {
         this.$router.go();
@@ -113,7 +112,6 @@ export default {
     },
     addPostClicked() {
       if (this.cityCountryCheck) {
-        console.log("city check ok");
         let jsonNewSortLocs = localStorage.getItem(
           "myLocalStorageSortedLocations"
         );
@@ -152,12 +150,11 @@ export default {
     },
     async addPost(newPost) {
       const result = await locationsApi.addLocation(newPost);
-      console.log(result);
       setTimeout(() => {
         this.$router.push({
           path: "/",
         });
-      }, 3000);
+      }, 2000);
     },
     cancelClicked() {
       this.showMessageBox = true;

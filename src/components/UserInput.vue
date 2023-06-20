@@ -157,12 +157,15 @@
       <div id="myModal" class="modal">
         <div class="modal-content">
           <span class="close" @click="closeModal()">&times;</span>
-          <p>{{ this.uIF.name }}</p>
+          <p>
+            A preview of {{ this.uIF.author }}s blog-post "{{
+              this.uIF.headLine
+            }}" will be available soon
+          </p>
         </div>
       </div>
     </div>
   </div>
-  <!-- <div id="messageBox">{{ messageBoxText }}</div> -->
 </template>
 
 <script>
@@ -203,20 +206,14 @@ export default {
   async created() {
     const Id = this.$route.params.id;
     if (Id) {
-      // console.log(
-      //   `EditPostView async created() calling getLocationById(${Id})`
-      // );
       const result = await locationsApi.getLocationById(Id);
-      // console.log(result);
       const selectedID = parseInt(Id);
       for (let i = 0; i < result.length; i++) {
         if (result[i].id === selectedID) {
           this.uIF = result[i];
-          // console.log(`${this.uIF.city} by ${this.uIF.author}`);
         }
       }
     } else {
-      console.log("no Id, NewPostView is my parent");
     }
   },
   components: {
@@ -237,7 +234,6 @@ export default {
       const uIFToSend = this.uIF;
       const OPENWEATHER_KEY = import.meta.env.VITE_OPENWEATHER_KEY;
       const cityCheckBtn = document.getElementById("cityCheckBtn");
-      // const messageBox = document.getElementById("messageBox");
       if (this.uIF.city == "") {
         const author = this.uIF.author;
         this.$emit("noCityInput", author);
@@ -245,7 +241,6 @@ export default {
         let url = `https://api.openweathermap.org/data/2.5/weather?q=${this.uIF.city}&appid=${OPENWEATHER_KEY}`;
         const response = await fetch(url);
         const geoData = await response.json();
-        console.log(geoData.cod);
         if (geoData.cod == 404) {
           const city = this.uIF.city;
           this.$emit("noCityFound", city);
@@ -253,25 +248,11 @@ export default {
           let city = this.uIF.city;
           this.uIF.geoData = geoData;
           this.uIF.country = geoData.sys.country;
-          let text = `Found ${city}, is this correct?`;
-          if (confirm(text) == true) {
-            this.cityCountryCheck = true;
-            cityCheckBtn.style.color = "green";
-            cityCheckBtn.innerHTML = "City confirmed";
-            let cityCountryCheckEmit = this.cityCountryCheck;
-            this.$emit(
-              "cityCheckClicked",
-              city,
-              uIFToSend,
-              cityCountryCheckEmit
-            );
-            console.log("UserInput says yes");
-          } else {
-            this.uIF.city = "";
-            this.uIF.country = "";
-            // messageBox.style.display = "none";
-            cityCheckBtn.style.color = "black";
-          }
+          this.cityCountryCheck = true;
+          cityCheckBtn.style.color = "green";
+          cityCheckBtn.innerHTML = "City confirmed";
+          let cityCountryCheckEmit = this.cityCountryCheck;
+          this.$emit("cityCheckClicked", city, uIFToSend, cityCountryCheckEmit);
         }
       }
     },

@@ -92,18 +92,11 @@
 <script>
 export default {
   data() {
-    return {
-      // isLoggedIn: false,
-    };
+    return {};
   },
   components: {},
   created() {},
-  methods: {
-    // isUserLoggedIn(userName) {
-    //   this.isLoggedIn = true;
-    //   console.log(`${userName} is logged in`);
-    // },
-  },
+  methods: {},
 };
 </script>
 

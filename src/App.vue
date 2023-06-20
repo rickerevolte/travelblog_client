@@ -16,15 +16,10 @@ export default {
   components: {
     NavHeader,
   },
-  created() {
-    console.log(`Logged in?: ${this.isLoggedIn}`);
-  },
+  created() {},
   methods: {
     isUserLoggedIn() {
-      console.log(`User is logging in`);
       this.isLoggedIn = true;
-      console.log(this.isLoggedIn);
-      console.log(`${this.loggedInUser} is logged in`);
     },
   },
 };
