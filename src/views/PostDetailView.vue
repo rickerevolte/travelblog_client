@@ -75,6 +75,7 @@ export default {
   },
   created() {
     const Id = this.$route.params.id;
+    console.log(Id);
     let jsonNewSortLocs = localStorage.getItem("myLocalStorageSortedLocations");
     let localLoadedPosts = JSON.parse(jsonNewSortLocs);
     this.allPosts = localLoadedPosts;
@@ -93,7 +94,9 @@ export default {
   // weather by city
   async mounted() {
     let city = this.city;
+    // console.log(`getting weather for ${city}`);
     let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPENWEATHER_KEY}`;
+    // console.log(url);
     const response = await fetch(url);
     const result = await response.json();
     this.weatherData = result;

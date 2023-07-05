@@ -214,6 +214,7 @@ export default {
         }
       }
     } else {
+      console.log("no Id, NewPostView is my parent");
     }
   },
   components: {
@@ -241,6 +242,7 @@ export default {
         let url = `https://api.openweathermap.org/data/2.5/weather?q=${this.uIF.city}&appid=${OPENWEATHER_KEY}`;
         const response = await fetch(url);
         const geoData = await response.json();
+        console.log(geoData.cod);
         if (geoData.cod == 404) {
           const city = this.uIF.city;
           this.$emit("noCityFound", city);
@@ -248,6 +250,8 @@ export default {
           let city = this.uIF.city;
           this.uIF.geoData = geoData;
           this.uIF.country = geoData.sys.country;
+          // get rid of confirm box
+          // let text = `Found ${city}, is this correct?`;
           this.cityCountryCheck = true;
           cityCheckBtn.style.color = "green";
           cityCheckBtn.innerHTML = "City confirmed";

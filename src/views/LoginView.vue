@@ -56,6 +56,7 @@ export default {
       const hideShowLoginSide = document.getElementById("logInAfterLoginSide");
 
       if (userData.user === "admin" && userData.password === "admin") {
+        console.log(userData.user);
         alert(`Welcome ${userData.user}!`);
         this.$emit("loggedIn");
 

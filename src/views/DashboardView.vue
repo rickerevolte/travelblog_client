@@ -83,6 +83,7 @@ export default {
     this.locations.sort(function (a, b) {
       return b.from.localeCompare(a.from);
     });
+    // save this.locations to localStorage for PostDetailView
     let jsonStringOfSortedLocs = JSON.stringify(this.locations);
     localStorage.setItem(
       "myLocalStorageSortedLocations",

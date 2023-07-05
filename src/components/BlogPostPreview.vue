@@ -68,7 +68,9 @@ export default {
       console.log("pushed");
     },
   },
-  created() {},
+  created() {
+    // console.log(this.city)
+  },
 };
 </script>
 
